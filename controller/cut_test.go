@@ -30,7 +30,7 @@ func TestTextGET(t *testing.T) {
 // }
 
 func TestPost(t *testing.T) {
-	d := `{"d":"test post "}`
+	d := `{"Text":"test post "}`
 	req.SetBodyJsonString(d).Post(baseurl)
 }
 

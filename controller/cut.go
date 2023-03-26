@@ -27,7 +27,10 @@ func (T *CutCtr) Creat(c *gin.Context) {
 	err := c.BindJSON(&data)
 	fmt.Println(err)
 
-	// if dat?
+	if data.Text == "" {
+		c.JSON(http.StatusBadRequest, "参数错误")
+		return
+	}
 
 	err = data.Creat()
 	if err != nil {
