@@ -1,6 +1,10 @@
 package model
 
-import "gorm.io/gorm"
+import (
+	"netcut/controller/param"
+
+	"gorm.io/gorm"
+)
 
 type Cut struct {
 	gorm.Model
@@ -8,6 +12,10 @@ type Cut struct {
 	Type string
 	File []byte
 	Text string
+}
+
+func NewCut() *Cut {
+	return &Cut{}
 }
 
 func (c *Cut) Creat() error {
@@ -29,10 +37,13 @@ func (c *Cut) QueryById() error {
 	return db.First(c, c.ID).Error
 }
 
-// func (t *Cut) WebList() (int, int, []Cut) {
-// 	q := db.Model(t)
-// 	var Count int64
-// 	q.Count(&Count)
-// 	q.Order("id desc").Limit(p.PageSize).Offset((p.PageNum - 1) * p.PageSize).Find(&list)
-// 	return int(Count)
-// }
+func (t *Cut) WebList(p *param.Page, list *[]*Cut) int {
+	q := db.Model(t)
+	if p.Statu != "" && p.Statu != "-1" {
+		q.Where("status = ?", p.Statu)
+	}
+	var Count int64
+	q.Count(&Count)
+	q.Order("id desc").Limit(p.PageSize).Offset((p.PageNum - 1) * p.PageSize).Find(&list)
+	return int(Count)
+}

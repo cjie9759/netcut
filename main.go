@@ -7,6 +7,8 @@ import (
 	"log"
 	"net/http"
 	"netcut/config"
+	"netcut/controller"
+	"netcut/model"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -17,14 +19,17 @@ var viewFs embed.FS
 
 func main() {
 	config.Init()
+	model.Init()
 	gin.DefaultWriter = io.MultiWriter(os.Stdout)
-	// var tor controller.Tor
+	var cut controller.CutCtr
 	r := gin.Default()
 	t := r.Group("/api")
 	t.Use(cors())
 	{
-		// t.GET("", tor.Get)
-		// t.GET("changTorToErr", tor.ErrTor)
+		t.GET("", cut.Get)
+		t.POST("", cut.Creat)
+		t.GET("/text", cut.CreatText)
+		// t.POST("/text", cut.CreatText)
 	}
 
 	fss, err := fs.Sub(viewFs, "view")
